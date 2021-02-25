@@ -1,0 +1,9 @@
+{
+  "name": "insejn/woosa-adyen",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "description": "Adyen payment gateway",
+  "keywords": [
+      "wordpress"
+  ]
+}

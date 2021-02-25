@@ -1,0 +1,929 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Woosa - Adyen for WooCommerce\n"
+"POT-Creation-Date: 2020-09-09 14:44+0200\n"
+"PO-Revision-Date: 2020-09-09 14:44+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: woosa-adyen.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+
+#: includes/class-ajax.php:147
+msgid "Something went wrong, please try again later or contact us."
+msgstr ""
+
+#: includes/class-ajax.php:158
+msgid "Order not found."
+msgstr ""
+
+#: includes/class-ajax.php:190
+msgid "The payment has been successfully captured."
+msgstr ""
+
+#: includes/class-api.php:60
+msgid "Please provide a valid API Key"
+msgstr ""
+
+#: includes/class-assets.php:80 includes/class-assets.php:184
+#: includes/woocommerce/payment/class-alipay.php:241
+#: includes/woocommerce/payment/class-applepay.php:265
+#: includes/woocommerce/payment/class-boleto.php:323
+#: includes/woocommerce/payment/class-credit-card.php:477
+#: includes/woocommerce/payment/class-googlepay.php:301
+#: includes/woocommerce/payment/class-wechatpay.php:240
+msgid "Processing..."
+msgstr ""
+
+#: includes/class-assets.php:81
+msgid "Are you sure you want to perform this action?"
+msgstr ""
+
+#: includes/class-assets.php:182
+msgid "Are you sure you want to remove this card?"
+msgstr ""
+
+#: includes/class-assets.php:183
+msgid ""
+"Are you sure you want to remove your personal information attached to this "
+"order payment?"
+msgstr ""
+
+#: includes/class-auto-update.php:190
+msgid "This plugin is already up to date, no new updates were found."
+msgstr ""
+
+#: includes/class-auto-update.php:524
+#, php-format
+msgid ""
+"Automatic updates & support is not active, please activate your license key. "
+"%sGo to settings%s"
+msgstr ""
+
+#: includes/class-auto-update.php:546
+msgid "An error occurred while getting the plugin information"
+msgstr ""
+
+#: includes/class-auto-update.php:590
+#, php-format
+msgid "%sStatus:%s %sActive%s"
+msgstr ""
+
+#: includes/class-auto-update.php:594
+#, php-format
+msgid "%sStatus:%s %sInactive%s"
+msgstr ""
+
+#: includes/class-core.php:209 includes/woocommerce/class-settings.php:102
+msgid "Settings"
+msgstr ""
+
+#: includes/class-core.php:210
+msgid "Payments"
+msgstr ""
+
+#: includes/class-core.php:211
+msgid "Logs"
+msgstr ""
+
+#: includes/class-core.php:212
+msgid "Check for Updates"
+msgstr ""
+
+#: includes/class-core.php:288
+#, php-format
+msgid "%sGo back%s"
+msgstr ""
+
+#: includes/class-dependency.php:90
+#, php-format
+msgid "The server must have at least %s installed."
+msgstr ""
+
+#: includes/class-dependency.php:112
+#, php-format
+msgid "This plugin requires %s extension to be installed on the server."
+msgstr ""
+
+#: includes/class-dependency.php:131
+#, php-format
+msgid "This plugin requires at least %s"
+msgstr ""
+
+#: includes/class-dependency.php:152
+#, php-format
+msgid "This plugin requires at least %s to be installed and active."
+msgstr ""
+
+#: includes/class-errors.php:78
+#, php-format
+msgid "We found some errors: %s"
+msgstr ""
+
+#: includes/class-routes.php:197 includes/class-routes.php:297
+#, php-format
+msgid "The payment amount of %s has been cancelled."
+msgstr ""
+
+#: includes/class-routes.php:211
+msgid "Waiting for customer to pay."
+msgstr ""
+
+#: includes/class-routes.php:218 includes/class-routes.php:285
+msgid "The payment could not be processed."
+msgstr ""
+
+#: includes/class-routes.php:280
+msgid "Waiting for payment capture."
+msgstr ""
+
+#: includes/class-routes.php:304
+#, php-format
+msgid "The payment amount of %s could not be cancelled."
+msgstr ""
+
+#: includes/class-routes.php:322 includes/class-routes.php:330
+msgid "The payment capture has failed."
+msgstr ""
+
+#: includes/class-routes.php:345 includes/class-routes.php:375
+#, php-format
+msgid "The payment amount of %s has been refunded."
+msgstr ""
+
+#: includes/class-routes.php:352 includes/class-routes.php:363
+#, php-format
+msgid "Refunding the payment amount of %s has failed."
+msgstr ""
+
+#: includes/class-routes.php:382
+#, php-format
+msgid "Refunding the payment amount of %s could not be refunded."
+msgstr ""
+
+#: includes/class-routes.php:498
+#, php-format
+msgid "Order completed using %s ."
+msgstr ""
+
+#: includes/woocommerce/class-my-account.php:76
+msgid "Stored Cards"
+msgstr ""
+
+#: includes/woocommerce/class-my-account.php:112
+msgid "Stored Creditcards"
+msgstr ""
+
+#: includes/woocommerce/class-my-account.php:116
+msgid "There are not stored cards yet."
+msgstr ""
+
+#: includes/woocommerce/class-my-account.php:127
+#, php-format
+msgid "Expires: %s"
+msgstr ""
+
+#: includes/woocommerce/class-my-account.php:129
+msgid "Remove this card"
+msgstr ""
+
+#: includes/woocommerce/class-order.php:88
+msgid "Capture Payment"
+msgstr ""
+
+#: includes/woocommerce/class-order.php:89
+msgid ""
+"By pressing this button you will request Adyen to capture the payment for "
+"this order."
+msgstr ""
+
+#: includes/woocommerce/class-order.php:91
+msgid "Capture"
+msgstr ""
+
+#: includes/woocommerce/class-order.php:117
+msgid "General Data Protection Regulation (GDPR)"
+msgstr ""
+
+#: includes/woocommerce/class-order.php:119
+msgid "Your personal information has been removed from this order payment."
+msgstr ""
+
+#: includes/woocommerce/class-order.php:121
+#, php-format
+msgid ""
+"This will erase your personal information attached to this order payment in "
+"Adyen system according to %sGDPR%s."
+msgstr ""
+
+#: includes/woocommerce/class-order.php:123
+msgid "Yes remove"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:86
+msgid "Adyen"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:103
+#: includes/woocommerce/class-settings.php:198
+msgid "Authorization"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:104
+msgid "Notifications"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:105
+#: includes/woocommerce/class-settings.php:296
+msgid "Tools"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:106
+msgid "License"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:129
+msgid "Payment"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:133
+msgid "Capture Mode"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:140
+msgid "Immediate"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:141
+msgid "With delay"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:142
+msgid "Manual"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:146
+msgid "Reference Prefix"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:148
+msgid ""
+"Specify a prefix (unique per webshop) for the payment reference. NOTE: Use "
+"this option only if you have a multisite installation otherwise you can "
+"leave it empty."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:153
+msgid "Remove Customer's Data"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:154
+#: includes/woocommerce/class-settings.php:171
+msgid "Enable"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:156
+#, php-format
+msgid ""
+"This allows your customers to remove their personal data (%s) attached to an "
+"order payment. This only deletes the customer-related data for the specific "
+"payment, but does not cancel the existing recurring transaction."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:165
+msgid "Misc"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:170
+msgid "Debug Mode"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:173
+msgid "Set whether or not to enable debug mode."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:179
+msgid "Remove Configuration"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:180
+#: includes/woocommerce/payment/class-credit-card.php:544
+msgid "Yes"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:182
+msgid "Set whether or not to remove the plugin configuration on uninstall."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:203
+msgid "Live Merchant Account"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:207
+#: includes/woocommerce/class-settings.php:238
+msgid "The Merchant Account used in production environment."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:210
+msgid "Live API Key"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:214
+msgid "The API Key used in production environment."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:217
+msgid "Live URL-prefix"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:221
+msgid "Provide here the LIVE URL-prefix you have from Adyen"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:224
+msgid "Test Mode"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:228
+#: includes/woocommerce/payment/class-abstract-gateway.php:572
+#: includes/woocommerce/payment/class-googlepay.php:332
+#: includes/woocommerce/payment/class-paypal.php:143
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:232
+msgid "Test Merchant Account"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:241
+msgid "Test API Key"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:247
+msgid "The API Key used for test environment."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:268
+msgid "Username"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:272
+msgid "Provide the username you set in authentication section (see step 5.)"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:275
+msgid "Password"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:279
+msgid "Provide the password you set in authentication section (see step 5.)"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:313
+msgid "Automatic updates & support"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:318
+msgid "API Key"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:324
+msgid "API Email"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:355
+#, php-format
+msgid ""
+"Please provide the Merchant Account and API Key to connect this webshop with "
+"Adyen platform, %sclick here%s for more details"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:356
+#, php-format
+msgid ""
+"%sImportant!%s Before go live please contact %sAdyen support team%s to set "
+"up endpoints for live payments and to get their URL-prefix"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:365
+msgid ""
+"No origin key found, please make sure you provided all the information below "
+"and hit the \"Save Changes\" button!"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:374
+msgid "Origin domain & key:"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:392
+msgid "Standard Notification"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:394
+#: includes/woocommerce/class-settings.php:413
+#, php-format
+msgid "Log in to your %s to configure notifications"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:395
+#: includes/woocommerce/class-settings.php:414
+#, php-format
+msgid "Go to %s"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:396
+#: includes/woocommerce/class-settings.php:415
+#, php-format
+msgid "Next to %s, click %s"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:398
+#: includes/woocommerce/class-settings.php:417
+#, php-format
+msgid "Under %s, enter your server's:"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:402
+#: includes/woocommerce/class-settings.php:421
+#, php-format
+msgid "Check the %s checkbox"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:405
+#: includes/woocommerce/class-settings.php:424
+#, php-format
+msgid ""
+"In the %s section, enter a username and password that will be used to "
+"authenticate Adyen notifications in your webshop."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:406
+#: includes/woocommerce/class-settings.php:425
+#, php-format
+msgid "Click %s"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:407
+#, php-format
+msgid ""
+"%sImportant!%s Please contact %sAdyen support team%s to activate additional "
+"configuration as it's described %shere%s"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:411
+msgid "Boleto Bancario Pending Notification"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:441
+msgid "NOTE: you have to enable this option in Adyen account as well!"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:442
+msgid "Manual: you need to explicitly request a capture for each payment."
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:522
+#, php-format
+msgid "%sStatus:%s %sUnauthorized%s"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:523
+#, php-format
+msgid "%sStatus:%s %sAuthorized%s"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:541
+msgid "The cache has been cleared!"
+msgstr ""
+
+#: includes/woocommerce/class-settings.php:564
+msgid "The admin errors have been removed!"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:115
+msgid "ANY"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:125
+#, php-format
+msgid "%sSupported country:%s ANY"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:125
+#, php-format
+msgid "%sSupported country:%s %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:437
+msgid "We could not found a valid recurring reference."
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:502
+#, php-format
+msgid "Sorry you cannot refund payments captured via %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:509
+msgid ""
+"Sorry you cannot refund this because the payment reference is invalid. "
+"Please try to refund it manually from Adyen account."
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:517
+#, php-format
+msgid "Sorry we cannot refund payments via %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:533
+msgid ""
+"Sorry, you cannot refund a partial amount because the transaction has not "
+"been captured yet but only cancel the entire payment"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:574
+#, php-format
+msgid "Enable %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:578
+msgid "Title"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:580
+msgid "The title which the user sees during checkout."
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:584
+msgid "Description"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:586
+msgid "The description which the user sees during checkout."
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:609
+#, php-format
+msgid ""
+"This payment method is not enabled in your Adyen account. %sGo to my account."
+"%s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:616
+#, php-format
+msgid ""
+"%sNote:%s Please make sure you have removed the cache. %sGo to settings.%s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-abstract-gateway.php:642
+#, php-format
+msgid "Order completed using %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-alipay.php:60
+msgid "Adyen - Alipay"
+msgstr ""
+
+#: includes/woocommerce/payment/class-applepay.php:43
+msgid "Adyen - Apple Pay"
+msgstr ""
+
+#: includes/woocommerce/payment/class-applepay.php:153
+#: includes/woocommerce/payment/class-googlepay.php:159
+msgid ""
+"Sorry it looks like Google token is not generated, please refresh the page "
+"and try again!"
+msgstr ""
+
+#: includes/woocommerce/payment/class-applepay.php:290
+#: includes/woocommerce/payment/class-googlepay.php:337
+msgid "Merchant Identifier"
+msgstr ""
+
+#: includes/woocommerce/payment/class-applepay.php:292
+msgid "Your Apple Merchant ID"
+msgstr ""
+
+#: includes/woocommerce/payment/class-applepay.php:295
+msgid "Merchant Name"
+msgstr ""
+
+#: includes/woocommerce/payment/class-applepay.php:297
+msgid ""
+"The merchant name that you want displayed on the Apple Pay payment sheet"
+msgstr ""
+
+#: includes/woocommerce/payment/class-bancontact.php:75
+msgid "Adyen - Bancontact"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:66
+msgid "Adyen - Boleto"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:160
+msgid "Social Security Number"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:169
+msgid "Delivery Date"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:197
+msgid "Social Securiry Number (CPF/CNPJ) is a required field"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:202
+msgid "Delivery date is a required field"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:209
+msgid "Delivery date format is invalid (YYYY-MM-DD)."
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:214
+msgid "Please specify the house number in the address"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:352
+msgid "Boleto Details"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:355
+msgid "Expiration Date"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:359
+msgid "Barcode"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:363
+msgid "PDF file"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:364
+msgid "Click to Download"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:408
+msgid "Set Notification"
+msgstr ""
+
+#: includes/woocommerce/payment/class-boleto.php:411
+#, php-format
+msgid "Please make sure %s is aleady set in Adyen account!"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:62
+msgid "Adyen - Credit Card"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:195
+msgid "Use a new card"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:237
+msgid "Sorry, the number of installments seems invalid, please try again"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:245
+msgid "Please provide the CVC/CVV of the card."
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:251
+msgid "Please make sure you provided all card details"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:257
+msgid "Please provide the card number."
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:262
+msgid "Please provide the card expiration month."
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:267
+msgid "Please provide the card expiration year."
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:543
+msgid "Allow Installments"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:547
+msgid ""
+"Whether or not to allow installments. This is only for Brazil, Mexico and "
+"Turkey"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:550
+msgid "Installments number"
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:553
+msgid "The maximum number for installments (used for Brazil)."
+msgstr ""
+
+#: includes/woocommerce/payment/class-credit-card.php:592
+msgid "Number of installments"
+msgstr ""
+
+#: includes/woocommerce/payment/class-giropay.php:47
+msgid "Adyen - Giropay"
+msgstr ""
+
+#: includes/woocommerce/payment/class-giropay.php:60
+#, php-format
+msgid ""
+"In order to support recurring payments with Giropay you have to enable SEPA "
+"Direct Debit first. %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-giropay.php:147
+msgid "Please provide your bank BIC code or select the bank name."
+msgstr ""
+
+#: includes/woocommerce/payment/class-googlepay.php:57
+msgid "Adyen - Google Pay"
+msgstr ""
+
+#: includes/woocommerce/payment/class-googlepay.php:325
+#, php-format
+msgid ""
+"1. If you already have a Google Pay Developer Profile then navigate to your "
+"Profile and find your Google merchant ID otherwise you have to %srequest one "
+"here%s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-googlepay.php:326
+msgid ""
+"2. Register your fully qualified domains that will invoke Google Pay API"
+msgstr ""
+
+#: includes/woocommerce/payment/class-googlepay.php:331
+#: includes/woocommerce/payment/class-paypal.php:142
+msgid "Test mode"
+msgstr ""
+
+#: includes/woocommerce/payment/class-ideal.php:75
+msgid "Adyen - iDEAL"
+msgstr ""
+
+#: includes/woocommerce/payment/class-ideal.php:88
+#, php-format
+msgid ""
+"In order to support recurring payments with iDeal you have to enable SEPA "
+"Direct Debit first. %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-ideal.php:158
+msgid "Select your bank"
+msgstr ""
+
+#: includes/woocommerce/payment/class-ideal.php:183
+msgid "Please select your bank account."
+msgstr ""
+
+#: includes/woocommerce/payment/class-klarna-account.php:68
+msgid "Adyen - Klarna - Slice it"
+msgstr ""
+
+#: includes/woocommerce/payment/class-klarna-account.php:80
+#, php-format
+msgid "Pay in installments over time. %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-klarna-paynow.php:59
+msgid "Adyen - Klarna - Pay now"
+msgstr ""
+
+#: includes/woocommerce/payment/class-klarna-paynow.php:71
+#, php-format
+msgid ""
+"Pay the whole amount instantly, either by online banking or direct debit. %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-klarna.php:104
+msgid "Adyen - Klarna - Pay later"
+msgstr ""
+
+#: includes/woocommerce/payment/class-klarna.php:116
+#, php-format
+msgid "Pay after the goods have been delivered. %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:60
+msgid "Adyen - Paypal"
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:165
+msgid "Configure PayPal API permissions"
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:166
+msgid ""
+"To connect your PayPal account with your Adyen integration you need to grant "
+"permission to Adyen's API to integrate with your PayPal account."
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:169
+#, php-format
+msgid "Follow %sPayPal's instructions on granting third party permissions%s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:172
+#, php-format
+msgid "Under %s, depending on your account type, enter:"
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:174
+#: includes/woocommerce/payment/class-paypal.php:175
+msgid "Enter"
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:179
+#, php-format
+msgid "In the %s list, select the following boxes: "
+msgstr ""
+
+#: includes/woocommerce/payment/class-paypal.php:196
+#, php-format
+msgid "Click %s."
+msgstr ""
+
+#: includes/woocommerce/payment/class-sepa-direct-debit.php:44
+msgid "Adyen - SEPA Direct Debit"
+msgstr ""
+
+#: includes/woocommerce/payment/class-sepa-direct-debit.php:56
+msgid ""
+"SEPA Direct Debit is used for recurring payments with WooCommerce "
+"Subscriptions, and will not be shown in the WooCommerce checkout."
+msgstr ""
+
+#: includes/woocommerce/payment/class-sofort.php:69
+msgid "Adyen - Sofort"
+msgstr ""
+
+#: includes/woocommerce/payment/class-sofort.php:82
+#, php-format
+msgid ""
+"In order to support recurring payments with Sofort you have to enable SEPA "
+"Direct Debit first. %s"
+msgstr ""
+
+#: includes/woocommerce/payment/class-wechatpay.php:60
+msgid "Adyen - WeChat Pay"
+msgstr ""
+
+#: templates/settings/tools.php:18
+msgid "Clear cache"
+msgstr ""
+
+#: templates/settings/tools.php:19
+msgid "This will clear all caching data which is stored in this moment."
+msgstr ""
+
+#: templates/settings/tools.php:20 templates/settings/tools.php:26
+msgid "Click to clear"
+msgstr ""
+
+#: templates/settings/tools.php:24
+msgid "Clear Adyen errors"
+msgstr ""
+
+#: templates/settings/tools.php:25
+msgid "This will clear all Adyen API errors displayed in admin area."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Woosa - Adyen for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.woosa.nl/product/adyen-woocommerce-plugin/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Allows WooCommerce to take payments via Adyen platform"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Woosa"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.woosa.nl"
+msgstr ""
