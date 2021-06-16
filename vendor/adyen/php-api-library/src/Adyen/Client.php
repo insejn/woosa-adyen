@@ -2,12 +2,14 @@
 
 namespace Woosa\Adyen\Adyen;
 
+use Woosa\Adyen\Adyen\HttpClient\ClientInterface;
+use Woosa\Adyen\Adyen\HttpClient\CurlClient;
 use Woosa\Adyen\Psr\Log\LoggerInterface;
 use Woosa\Adyen\Monolog\Logger;
 use Woosa\Adyen\Monolog\Handler\StreamHandler;
 class Client
 {
-    const LIB_VERSION = "5.0.1";
+    const LIB_VERSION = "10.1.0";
     const LIB_NAME = "adyen-php-api-library";
     const USER_AGENT_SUFFIX = "adyen-php-api-library/";
     const ENDPOINT_TEST = "https://pal-test.adyen.com";
@@ -15,15 +17,17 @@ class Client
     const ENDPOINT_LIVE_SUFFIX = "-pal-live.adyenpayments.com";
     const ENDPOINT_TEST_DIRECTORY_LOOKUP = "https://test.adyen.com/hpp/directory/v2.shtml";
     const ENDPOINT_LIVE_DIRECTORY_LOOKUP = "https://live.adyen.com/hpp/directory/v2.shtml";
-    const API_PAYMENT_VERSION = "v40";
-    const API_BIN_LOOKUP_VERSION = "v40";
-    const API_PAYOUT_VERSION = "v30";
-    const API_RECURRING_VERSION = "v25";
-    const API_CHECKOUT_VERSION = "v51";
+    const API_PAYMENT_VERSION = "v51";
+    const API_BIN_LOOKUP_VERSION = "v50";
+    const API_PAYOUT_VERSION = "v51";
+    const API_RECURRING_VERSION = "v49";
+    const API_CHECKOUT_VERSION = "v67";
     const API_CHECKOUT_UTILITY_VERSION = "v1";
-    const API_NOTIFICATION_VERSION = "v1";
+    const API_NOTIFICATION_VERSION = "v5";
     const API_ACCOUNT_VERSION = "v5";
     const API_FUND_VERSION = "v5";
+    const API_DISPUTE_SERVICE_VERSION = "v30";
+    const API_HOP_VERSION = "v5";
     const ENDPOINT_TERMINAL_CLOUD_TEST = "https://terminal-api-test.adyen.com";
     const ENDPOINT_TERMINAL_CLOUD_LIVE = "https://terminal-api-live.adyen.com";
     const ENDPOINT_CHECKOUT_TEST = "https://checkout-test.adyen.com/checkout";
@@ -35,37 +39,43 @@ class Client
     const ENDPOINT_ACCOUNT_LIVE = "https://cal-live.adyen.com/cal/services/Account";
     const ENDPOINT_FUND_TEST = "https://cal-test.adyen.com/cal/services/Fund";
     const ENDPOINT_FUND_LIVE = "https://cal-live.adyen.com/cal/services/Fund";
+    const ENDPOINT_DISPUTE_SERVICE_TEST = "https://ca-test.adyen.com/ca/services/DisputeService";
+    const ENDPOINT_DISPUTE_SERVICE_LIVE = "https://ca-live.adyen.com/ca/services/DisputeService";
+    const ENDPOINT_CUSTOMER_AREA_TEST = "https://ca-test.adyen.com";
+    const ENDPOINT_CUSTOMER_AREA_LIVE = "https://ca-live.adyen.com";
+    const ENDPOINT_HOP_TEST = "https://cal-test.adyen.com/cal/services/Hop";
+    const ENDPOINT_HOP_LIVE = "https://cal-live.adyen.com/cal/services/Hop";
     /**
-     * @var \Adyen\Config $config
+     * @var Config|ConfigInterface
      */
     private $config;
     /**
-     * @var
+     * @var ClientInterface|null
      */
     private $httpClient;
     /**
-     * @var Logger $logger
+     * @var LoggerInterface|null
      */
     private $logger;
     /**
      * Client constructor.
      *
-     * @param null $config
+     * @param ConfigInterface|null $config
      * @throws AdyenException
      */
     public function __construct($config = null)
     {
-        if (!$config) {
+        if ($config === null) {
             // create config
             $this->config = new \Woosa\Adyen\Adyen\Config();
         } elseif ($config instanceof \Woosa\Adyen\Adyen\ConfigInterface) {
             $this->config = $config;
         } else {
-            throw new \Woosa\Adyen\Adyen\AdyenException("This config object is not supported, you need to implement the ConfigInterface");
+            throw new \Woosa\Adyen\Adyen\AdyenException('This config object is not supported,' . ' you need to implement the ConfigInterface');
         }
     }
     /**
-     * @return Config|ConfigInterface|null
+     * @return Config|ConfigInterface
      */
     public function getConfig()
     {
@@ -112,7 +122,8 @@ class Client
      * For live please specify the unique identifier.
      *
      * @param string $environment
-     * @param null $liveEndpointUrlPrefix Provide the unique live url prefix from the "API URLs and Response" menu in the Adyen Customer Area
+     * @param string|null $liveEndpointUrlPrefix Provide the unique live url prefix from the "API URLs and Response"
+     *                                           menu in the Adyen Customer Area
      * @throws AdyenException
      */
     public function setEnvironment($environment, $liveEndpointUrlPrefix = null)
@@ -126,6 +137,9 @@ class Client
             $this->config->set('endpointNotification', self::ENDPOINT_NOTIFICATION_TEST);
             $this->config->set('endpointAccount', self::ENDPOINT_ACCOUNT_TEST);
             $this->config->set('endpointFund', self::ENDPOINT_FUND_TEST);
+            $this->config->set('endpointDisputeService', self::ENDPOINT_DISPUTE_SERVICE_TEST);
+            $this->config->set('endpointCustomerArea', self::ENDPOINT_CUSTOMER_AREA_TEST);
+            $this->config->set('endpointHop', self::ENDPOINT_HOP_TEST);
         } elseif ($environment == \Woosa\Adyen\Adyen\Environment::LIVE) {
             $this->config->set('environment', \Woosa\Adyen\Adyen\Environment::LIVE);
             $this->config->set('endpointDirectorylookup', self::ENDPOINT_LIVE_DIRECTORY_LOOKUP);
@@ -133,6 +147,9 @@ class Client
             $this->config->set('endpointNotification', self::ENDPOINT_NOTIFICATION_LIVE);
             $this->config->set('endpointAccount', self::ENDPOINT_ACCOUNT_LIVE);
             $this->config->set('endpointFund', self::ENDPOINT_FUND_LIVE);
+            $this->config->set('endpointDisputeService', self::ENDPOINT_DISPUTE_SERVICE_LIVE);
+            $this->config->set('endpointCustomerArea', self::ENDPOINT_CUSTOMER_AREA_LIVE);
+            $this->config->set('endpointHop', self::ENDPOINT_HOP_LIVE);
             if ($liveEndpointUrlPrefix) {
                 $this->config->set('endpoint', self::ENDPOINT_PROTOCOL . $liveEndpointUrlPrefix . self::ENDPOINT_LIVE_SUFFIX);
                 $this->config->set('endpointCheckout', self::ENDPOINT_PROTOCOL . $liveEndpointUrlPrefix . self::ENDPOINT_CHECKOUT_LIVE_SUFFIX);
@@ -326,6 +343,15 @@ class Client
         return self::API_ACCOUNT_VERSION;
     }
     /**
+     * Get the version of the HOP (Hosted Onboarding Page) API endpoint
+     *
+     * @return string
+     */
+    public function getApiHopVersion()
+    {
+        return self::API_HOP_VERSION;
+    }
+    /**
      * Get the version of the Fund API endpoint
      *
      * @return string
@@ -335,24 +361,33 @@ class Client
         return self::API_FUND_VERSION;
     }
     /**
-     * @param HttpClient\ClientInterface $httpClient
+     * Get the disputes service API version
+     *
+     * @return string
+     */
+    public function getDisputeServiceVersion()
+    {
+        return self::API_DISPUTE_SERVICE_VERSION;
+    }
+    /**
+     * @param ClientInterface $httpClient
      */
     public function setHttpClient(\Woosa\Adyen\Adyen\HttpClient\ClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;
     }
     /**
-     * @return mixed
+     * @return ClientInterface
      */
     public function getHttpClient()
     {
-        if (\is_null($this->httpClient)) {
+        if ($this->httpClient === null) {
             $this->httpClient = $this->createDefaultHttpClient();
         }
         return $this->httpClient;
     }
     /**
-     * @return HttpClient\CurlClient
+     * @return CurlClient
      */
     protected function createDefaultHttpClient()
     {
@@ -361,26 +396,24 @@ class Client
     /**
      * Set the Logger object
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      */
     public function setLogger(\Woosa\Adyen\Psr\Log\LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
     /**
-     * @return Logger
-     * @throws \Exception
+     * @return LoggerInterface
      */
     public function getLogger()
     {
-        if (!isset($this->logger)) {
+        if ($this->logger === null) {
             $this->logger = $this->createDefaultLogger();
         }
         return $this->logger;
     }
     /**
      * @return Logger
-     * @throws \Exception
      */
     protected function createDefaultLogger()
     {

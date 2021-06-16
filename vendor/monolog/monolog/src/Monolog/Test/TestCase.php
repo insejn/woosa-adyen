@@ -32,9 +32,6 @@ class TestCase extends \Woosa\Adyen\PHPUnit\Framework\TestCase
     {
         return [$this->getRecord(\Woosa\Adyen\Monolog\Logger::DEBUG, 'debug message 1'), $this->getRecord(\Woosa\Adyen\Monolog\Logger::DEBUG, 'debug message 2'), $this->getRecord(\Woosa\Adyen\Monolog\Logger::INFO, 'information'), $this->getRecord(\Woosa\Adyen\Monolog\Logger::WARNING, 'warning'), $this->getRecord(\Woosa\Adyen\Monolog\Logger::ERROR, 'error')];
     }
-    /**
-     * @suppress PhanTypeMismatchReturn
-     */
     protected function getIdentityFormatter() : \Woosa\Adyen\Monolog\Formatter\FormatterInterface
     {
         $formatter = $this->createMock(\Woosa\Adyen\Monolog\Formatter\FormatterInterface::class);

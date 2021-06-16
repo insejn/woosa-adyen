@@ -15,6 +15,7 @@ use Woosa\Adyen\Monolog\Logger;
 use Woosa\Adyen\Monolog\Formatter\FormatterInterface;
 use Woosa\Adyen\Monolog\Formatter\LogglyFormatter;
 use function array_key_exists;
+use CurlHandle;
 /**
  * Sends errors to Loggly.
  *
@@ -30,7 +31,7 @@ class LogglyHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHandl
     /**
      * Caches the curl handlers for every given endpoint.
      *
-     * @var array
+     * @var resource[]|CurlHandle[]
      */
     protected $curlHandlers = [];
     protected $token;
@@ -55,12 +56,12 @@ class LogglyHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHandl
      *
      * @param string $endpoint
      *
-     * @return resource
+     * @return resource|CurlHandle
      */
     protected function getCurlHandler(string $endpoint)
     {
         if (!\array_key_exists($endpoint, $this->curlHandlers)) {
-            $this->curlHandlers[$endpoint] = $this->loadCurlHandler($endpoint);
+            $this->curlHandlers[$endpoint] = $this->loadCurlHandle($endpoint);
         }
         return $this->curlHandlers[$endpoint];
     }
@@ -69,9 +70,9 @@ class LogglyHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHandl
      *
      * @param string $endpoint
      *
-     * @return resource
+     * @return resource|CurlHandle
      */
-    private function loadCurlHandler(string $endpoint)
+    private function loadCurlHandle(string $endpoint)
     {
         $url = \sprintf("https://%s/%s/%s/", static::HOST, $endpoint, $this->token);
         $ch = \curl_init();

@@ -105,14 +105,20 @@ class OverflowHandler extends \Woosa\Adyen\Monolog\Handler\AbstractHandler imple
      */
     public function setFormatter(\Woosa\Adyen\Monolog\Formatter\FormatterInterface $formatter) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {
-        $this->handler->setFormatter($formatter);
-        return $this;
+        if ($this->handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            $this->handler->setFormatter($formatter);
+            return $this;
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
     }
     /**
      * {@inheritdoc}
      */
     public function getFormatter() : \Woosa\Adyen\Monolog\Formatter\FormatterInterface
     {
-        return $this->handler->getFormatter();
+        if ($this->handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            return $this->handler->getFormatter();
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
     }
 }

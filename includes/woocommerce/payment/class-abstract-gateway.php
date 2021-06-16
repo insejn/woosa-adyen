@@ -83,6 +83,8 @@ abstract class Abstract_Gateway extends \WC_Payment_Gateway{
       add_action('woocommerce_scheduled_subscription_payment_'.$this->id, [$this, 'renewal_subscription'], 10, 2);
       add_action('woocommerce_thankyou', [$this, 'order_received_page'], 1);
 
+      $this->send_payment_details();
+
    }
 
 
@@ -669,6 +671,7 @@ abstract class Abstract_Gateway extends \WC_Payment_Gateway{
    /**
     * Updates order status based on the payment result.
     *
+    * @since 1.1.3 - set order on `on-hold` for `Received` status
     * @since 1.1.0
     * @param \WC_Order $order
     * @param array $response - payment request response
@@ -681,6 +684,7 @@ abstract class Abstract_Gateway extends \WC_Payment_Gateway{
          'Refused'    => 'failed',
          'Error'      => 'failed',
          'Cancelled'  => 'cancelled',
+         'Received'  => 'on-hold',
       ];
 
       $result_code      = Utility::rgar($response, 'resultCode');
@@ -744,6 +748,7 @@ abstract class Abstract_Gateway extends \WC_Payment_Gateway{
    /**
     * Builds the required payment payload
     *
+    * @since 1.1.3 - add by default `shopperInteraction` and `recurringProcessingModel`
     * @since 1.1.1- fix wrong variable name
     * @since 1.1.0
     * @param \WC_Order $order
@@ -753,18 +758,20 @@ abstract class Abstract_Gateway extends \WC_Payment_Gateway{
    protected function build_payment_payload(\WC_Order $order, $reference){
 
       $payload = apply_filters(PREFIX . '\abstract_gateway\payment_payload', [
-         'channel'          => 'web',
-         'origin'           => home_url(),
-         'reference'        => Order::add_reference_prefix($reference),
-         'returnUrl'        => $this->get_return_url( $order ),
-         'merchantAccount'  => API::account()->merchant,
-         'countryCode'      => $order->get_billing_country(),
-         'telephoneNumber'  => $order->get_billing_phone(),
-         'shopperIP'        => Utility::get_client_ip(),
-         'lineItems'        => $this->list_order_items($order),
-         'shopperLocale'    => get_locale(),
-         'shopperEmail'     => $order->get_billing_email(),
-         'shopperReference' => $order->get_meta('_'.PREFIX.'_shopper_reference', true),
+         'channel'                  => 'web',
+         'origin'                   => home_url(),
+         'reference'                => Order::add_reference_prefix($reference),
+         'returnUrl'                => $this->get_return_url( $order ),
+         'merchantAccount'          => API::account()->merchant,
+         'countryCode'              => $order->get_billing_country(),
+         'telephoneNumber'          => $order->get_billing_phone(),
+         'lineItems'                => $this->list_order_items($order),
+         'recurringProcessingModel' => Checkout::has_subscription() ? 'Subscription' : 'CardOnFile',
+         'shopperInteraction'       => 'Ecommerce',
+         'shopperIP'                => Utility::get_client_ip(),
+         'shopperLocale'            => get_locale(),
+         'shopperEmail'             => $order->get_billing_email(),
+         'shopperReference'         => $order->get_meta('_'.PREFIX.'_shopper_reference', true),
          'shopperName' => [
             'firstName' => $order->get_billing_first_name(),
             'lastName'  => $order->get_billing_last_name(),
@@ -830,6 +837,55 @@ abstract class Abstract_Gateway extends \WC_Payment_Gateway{
 
 
       return $payload;
+   }
+
+
+
+   /**
+    * Sends received payment details to be processed
+    *
+    * @since 1.1.3 - add support for API Checkout v67
+    * @since 1.0.0
+    * @return void
+    */
+   public function send_payment_details(){
+
+      if(is_checkout() && isset($_GET['key']) && isset($_GET['redirectResult'])){
+
+         $order_id = wc_get_order_id_by_order_key($_GET['key']);
+         $order = wc_get_order($order_id);
+         $method_types = [
+            'scheme'         => 'woosa_adyen_credit_card',
+            'bcmc'           => 'woosa_adyen_bancontact',
+            'klarna'         => 'woosa_adyen_klarna',
+            'klarna_paynow'  => 'woosa_adyen_klarna_paynow',
+            'klarna_account' => 'woosa_adyen_klarna_account',
+            'paypal'         => 'woosa_adyen_paypal',
+            'ideal'          => 'woosa_adyen_ideal',
+            'directEbanking' => 'woosa_adyen_sofort',
+            'giropay'        => 'woosa_adyen_giropay',
+         ];
+
+         if($order instanceof \WC_Order){
+
+            //only if matches the order payment method
+            if( isset($method_types[$this->payment_method_type()]) && $order->get_payment_method() === $method_types[$this->payment_method_type()] ){
+
+               $payload = [
+                  'details' => [
+                     'redirectResult' => urldecode($_GET['redirectResult']),
+                  ]
+               ];
+
+               $request = API::send_payment_details($payload);
+
+               $this->update_order_status_based_on_payment_result($order, $request);
+
+               wp_redirect( $this->get_return_url( $order ) );
+            }
+         }
+      }
+
    }
 
 

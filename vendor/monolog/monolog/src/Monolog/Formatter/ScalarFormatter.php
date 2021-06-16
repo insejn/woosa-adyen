@@ -31,12 +31,12 @@ class ScalarFormatter extends \Woosa\Adyen\Monolog\Formatter\NormalizerFormatter
     }
     /**
      * @param  mixed $value
-     * @return mixed
+     * @return string|int|bool|null
      */
     protected function normalizeValue($value)
     {
         $normalized = $this->normalize($value);
-        if (\is_array($normalized) || \is_object($normalized)) {
+        if (\is_array($normalized)) {
             return $this->toJson($normalized, \true);
         }
         return $normalized;

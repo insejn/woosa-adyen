@@ -1,12 +1,11 @@
 <?php
 /**
- * AJAX Requests
+ * AJAX
  *
  * This class is used for processing AJAX requests.
  *
- * @package Woosa-Adyen/Requests
+ * @version 1.0.0
  * @author Woosa Team
- * @since 1.0.0
  */
 
 namespace Woosa\Adyen;
@@ -18,13 +17,43 @@ defined( 'ABSPATH' ) || exit;
 
 class AJAX{
 
+   /**
+    * The instance of this class.
+    *
+    * @since 1.0.0
+    * @var null|object
+    */
+   protected static $instance = null;
+
+
+
+	/**
+	 * Returns an instance of this class.
+	 *
+	 * @since 1.0.0
+	 * @return object A single instance of this class.
+	 */
+	public static function instance() {
+
+		// If the single instance hasn't been set, set it now.
+		if ( null == self::$instance ) {
+			self::$instance = new self;
+		}
+
+		return self::$instance;
+   }
+
+
 
    /**
-    * Catches AJAX requests.
+    * Constructor of this class.
     *
+    * @since 1.0.0
     * @return void
     */
-    public static function init(){
+   public function __construct(){
+
+      add_action('wp_ajax_'.PREFIX.'_revoke_authorization', [__CLASS__, 'process_revoke_authorization']);
 
       add_action('wp_ajax_nopriv_'.PREFIX.'_send_payment_details', [__CLASS__, 'send_payment_details']);
       add_action('wp_ajax_'.PREFIX.'_send_payment_details', [__CLASS__, 'send_payment_details']);
@@ -33,6 +62,29 @@ class AJAX{
       add_action('wp_ajax_'.PREFIX.'_remove_gdpr', [__CLASS__, 'process_remove_gdpr']);
 
       add_action('wp_ajax_'.PREFIX.'_capture_payment', [__CLASS__, 'capture_payment']);
+   }
+
+
+
+   /**
+    * Triggers the request to revoke the authorization
+    *
+    * @since 1.0.0
+    * @return string
+    */
+   public static function process_revoke_authorization(){
+
+      //check to make sure the request is from same server
+      if(!check_ajax_referer( 'wsa-nonce', 'security', false )){
+         return;
+      }
+
+      $extra = $_POST['extra'];
+      $env = $extra['environment'];
+
+      API::instance($env)->set_as_unauthorized();
+
+      wp_send_json_success();
    }
 
 

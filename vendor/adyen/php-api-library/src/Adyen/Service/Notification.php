@@ -2,6 +2,15 @@
 
 namespace Woosa\Adyen\Adyen\Service;
 
+use Woosa\Adyen\Adyen\AdyenException;
+use Woosa\Adyen\Adyen\Client;
+use Woosa\Adyen\Adyen\Service;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Notification\CreateNotificationConfiguration;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Notification\DeleteNotificationConfigurations;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Notification\GetNotificationConfiguration;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Notification\GetNotificationConfigurationList;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Notification\TestNotificationConfiguration;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Notification\UpdateNotificationConfiguration;
 class Notification extends \Woosa\Adyen\Adyen\Service
 {
     /**
@@ -30,8 +39,8 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     protected $testNotificationConfiguration;
     /**
      * Notification constructor.
-     * @param \Adyen\Client $client
-     * @throws \Adyen\AdyenException
+     * @param Client $client
+     * @throws AdyenException
      */
     public function __construct(\Woosa\Adyen\Adyen\Client $client)
     {
@@ -46,7 +55,7 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function createNotificationConfiguration($params)
     {
@@ -55,7 +64,7 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function updateNotificationConfiguration($params)
     {
@@ -64,7 +73,7 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function getNotificationConfiguration($params)
     {
@@ -73,7 +82,7 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function deleteNotificationConfigurations($params)
     {
@@ -82,7 +91,7 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function getNotificationConfigurationList($params)
     {
@@ -91,7 +100,7 @@ class Notification extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function testNotificationConfiguration($params)
     {

@@ -31,7 +31,7 @@ class MongoDBFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInterf
     {
         $this->maxNestingLevel = \max($maxNestingLevel, 0);
         $this->exceptionTraceAsString = $exceptionTraceAsString;
-        $this->isLegacyMongoExt = \version_compare(\phpversion('mongodb'), '1.1.9', '<=');
+        $this->isLegacyMongoExt = \extension_loaded('mongodb') && \version_compare(\phpversion('mongodb'), '1.1.9', '<=');
     }
     /**
      * {@inheritDoc}
@@ -97,7 +97,7 @@ class MongoDBFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInterf
     }
     private function getMongoDbDateTime(\DateTimeInterface $value) : \MongoDB\BSON\UTCDateTime
     {
-        return new \MongoDB\BSON\UTCDateTime((int) (string) \floor($value->format('U.u') * 1000));
+        return new \MongoDB\BSON\UTCDateTime((int) \floor((float) $value->format('U.u') * 1000));
     }
     /**
      * This is needed to support MongoDB Driver v1.19 and below
@@ -108,7 +108,7 @@ class MongoDBFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInterf
      */
     private function legacyGetMongoDbDateTime(\DateTimeInterface $value) : \MongoDB\BSON\UTCDateTime
     {
-        $milliseconds = \floor($value->format('U.u') * 1000);
+        $milliseconds = \floor((float) $value->format('U.u') * 1000);
         $milliseconds = \PHP_INT_SIZE == 8 ? (int) $milliseconds : (string) $milliseconds;
         return new \MongoDB\BSON\UTCDateTime($milliseconds);
     }

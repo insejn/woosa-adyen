@@ -23,6 +23,23 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.1.4 - 2021-05-27 =
+
+* [FIX] - Fix Javascript conflict on License section
+
+= 1.1.3 - 2021-05-13 =
+
+* [FIX] - Sending payment details fails in some cases due to cookie
+* [FIX] - Undefined function in Paypal method
+* [FIX] - Change Google pay icon
+* [IMPROVEMENT] - Upgrade Adyen PHP client library from v5.0.0 to v10.1.0
+* [IMPROVEMENT] - Upgrade Adyen JS component from v3.12.1 to v4.4.0
+* [TWEAK] - Small changes to Tools section
+
+= 1.1.2 - 2021-04-12 =
+
+* [IMPROVEMENT] - Rebuilt license management and the logic of receving updates
+
 = 1.1.1 - 2020-10.03 =
 
 * [FIX] - Fixed missing icon on "Use new card" button in checkout page

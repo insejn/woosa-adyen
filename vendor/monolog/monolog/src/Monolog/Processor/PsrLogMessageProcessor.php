@@ -63,7 +63,7 @@ class PsrLogMessageProcessor implements \Woosa\Adyen\Monolog\Processor\Processor
             } elseif (\is_object($val)) {
                 $replacements[$placeholder] = '[object ' . \Woosa\Adyen\Monolog\Utils::getClass($val) . ']';
             } elseif (\is_array($val)) {
-                $replacements[$placeholder] = 'array' . @\json_encode($val);
+                $replacements[$placeholder] = 'array' . \Woosa\Adyen\Monolog\Utils::jsonEncode($val, null, \true);
             } else {
                 $replacements[$placeholder] = '[' . \gettype($val) . ']';
             }

@@ -47,7 +47,6 @@ class Credit_Card extends Abstract_Gateway{
       add_action('woocommerce_pay_order_after_submit', [$this, 'display_payment_action']);
       add_action('woocommerce_after_checkout_form', [$this, 'display_payment_action']);
 
-      $this->send_payment_details();
    }
 
 
@@ -488,46 +487,6 @@ class Credit_Card extends Abstract_Gateway{
             <?php
          }
 
-      }
-   }
-
-
-
-   /**
-    * Sends received payment details to be processed
-    *
-    * @since 1.0.4 - add suport for both $_POST and $_GET
-    * @since 1.0.0
-    * @return void
-    */
-   public function send_payment_details(){
-
-      if(is_checkout() && isset($_REQUEST['MD']) && isset($_REQUEST['PaRes'])){
-
-         $order_id = wc_get_order_id_by_order_key($_GET['key']);
-         $order = wc_get_order($order_id);
-
-         if($order instanceof \WC_Order){
-
-            $PaRes = Utility::rgar($_REQUEST, 'PaRes');
-            $MD    = Utility::rgar($_REQUEST, 'MD');
-
-            $action = $order->get_meta('_'.PREFIX.'_payment_action', true);
-
-            $payload = [
-               'paymentData' => Utility::rgar($action, 'paymentData'),
-               'details' => [
-                  'PaRes' => $PaRes,
-                  'MD' => $MD,
-               ]
-            ];
-
-            $request = API::send_payment_details($payload);
-
-            $this->update_order_status_based_on_payment_result($order, $request);
-
-            wp_redirect( $this->get_return_url( $order ) );
-         }
       }
    }
 

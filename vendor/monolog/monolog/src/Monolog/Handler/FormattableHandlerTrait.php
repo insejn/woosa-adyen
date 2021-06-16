@@ -21,12 +21,11 @@ use Woosa\Adyen\Monolog\Formatter\LineFormatter;
 trait FormattableHandlerTrait
 {
     /**
-     * @var FormatterInterface
+     * @var ?FormatterInterface
      */
     protected $formatter;
     /**
      * {@inheritdoc}
-     * @suppress PhanTypeMismatchReturn
      */
     public function setFormatter(\Woosa\Adyen\Monolog\Formatter\FormatterInterface $formatter) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {

@@ -106,9 +106,6 @@ class PHPConsoleHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingH
         }
         return \array_replace($this->options, $options);
     }
-    /**
-     * @suppress PhanTypeMismatchArgument
-     */
     private function initConnector(?\Woosa\Adyen\PhpConsole\Connector $connector = null) : \Woosa\Adyen\PhpConsole\Connector
     {
         if (!$connector) {

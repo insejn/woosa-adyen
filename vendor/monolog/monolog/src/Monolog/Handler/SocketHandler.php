@@ -25,15 +25,16 @@ class SocketHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHandl
     /** @var resource|null */
     private $resource;
     /** @var float */
-    private $timeout = 0;
+    private $timeout = 0.0;
     /** @var float */
-    private $writingTimeout = 10;
+    private $writingTimeout = 10.0;
     private $lastSentBytes = null;
     /** @var int */
     private $chunkSize = null;
     private $persistent = \false;
     private $errno;
     private $errstr;
+    /** @var ?float */
     private $lastWritingAt;
     /**
      * @param string     $connectionString Socket connection string
@@ -314,18 +315,18 @@ class SocketHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHandl
     }
     private function writingIsTimedOut(int $sent) : bool
     {
-        $writingTimeout = (int) \floor($this->writingTimeout);
-        if (0 === $writingTimeout) {
+        // convert to ms
+        if (0.0 == $this->writingTimeout) {
             return \false;
         }
         if ($sent !== $this->lastSentBytes) {
-            $this->lastWritingAt = \time();
+            $this->lastWritingAt = \microtime(\true);
             $this->lastSentBytes = $sent;
             return \false;
         } else {
             \usleep(100);
         }
-        if (\time() - $this->lastWritingAt >= $writingTimeout) {
+        if (\microtime(\true) - $this->lastWritingAt >= $this->writingTimeout) {
             $this->closeSocket();
             return \true;
         }

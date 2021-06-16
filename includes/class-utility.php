@@ -91,7 +91,7 @@ class Utility{
 			$value = '';
 		}
 
-		return empty( $value ) && $default !== null ? $default : $value;
+		return '' === $value && $default !== null ? $default : $value;
 	}
 
 
@@ -315,19 +315,54 @@ class Utility{
 
 
    /**
-    * Calculates sum of two numbers.
+    * Checks whether or not our debug option is enabled.
     *
-    * @param string $x
-    * @param string $y
-    * @return void
+    * @since 1.0.0
+    * @return boolean
     */
-   public static function sum($x, $y){
+   public static function is_debug_enabled(){
 
-      if(!is_numeric($x) || !is_numeric($y)){
-         throw new \InvalidArgumentException;
+      $debug = get_option(PREFIX .'_debug');
+
+      if('yes' === $debug){
+         return true;
       }
 
-      return $x + $y;
+      return false;
+   }
+
+
+
+   /**
+    * Checks if the string is a json.
+    *
+    * @since 1.0.0
+    * @param string $string
+    * @return boolean
+    */
+   public static function is_json($string){
+      return is_string($string) && is_array(json_decode($string, true)) ? true : false;
+   }
+
+
+
+   /**
+    * Adds plugi prefix to a given string.
+    *
+    * @since 1.0.0
+    * @param string $string
+    * @param bool $dash
+    * @return string
+    */
+   public static function prefix(string $string, $dash = false){
+
+      $separator = $dash ? '-' : '_';
+
+      if(strpos($string, PREFIX . $separator) === false){
+         return PREFIX . $separator . $string;
+      }
+
+      return $string;
    }
 
 
@@ -369,25 +404,6 @@ class Utility{
       }
 
       return str_replace('_', '-', get_locale());//get WP locale
-   }
-
-
-
-   /**
-    * Checks whether or not our debug option is enabled.
-    *
-    * @since 1.0.6
-    * @return boolean
-    */
-   public static function is_debug_enabled(){
-
-      $debug = get_option(PREFIX .'_debug');
-
-      if('yes' === $debug){
-         return true;
-      }
-
-      return false;
    }
 
 

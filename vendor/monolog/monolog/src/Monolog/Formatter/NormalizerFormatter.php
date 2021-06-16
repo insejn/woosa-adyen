@@ -22,9 +22,13 @@ use Throwable;
 class NormalizerFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInterface
 {
     public const SIMPLE_DATE = "Y-m-d\\TH:i:sP";
+    /** @var string */
     protected $dateFormat;
+    /** @var int */
     protected $maxNormalizeDepth = 9;
+    /** @var int */
     protected $maxNormalizeItemCount = 1000;
+    /** @var int */
     private $jsonEncodeOptions = \Woosa\Adyen\Monolog\Utils::DEFAULT_JSON_FLAGS;
     /**
      * @param string|null $dateFormat The format of the timestamp: one supported by DateTime::format
@@ -52,6 +56,15 @@ class NormalizerFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInt
             $records[$key] = $this->format($record);
         }
         return $records;
+    }
+    public function getDateFormat() : string
+    {
+        return $this->dateFormat;
+    }
+    public function setDateFormat(string $dateFormat) : self
+    {
+        $this->dateFormat = $dateFormat;
+        return $this;
     }
     /**
      * The maximum number of normalization levels to go through
@@ -134,12 +147,7 @@ class NormalizerFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInt
                 $value = $data->__toString();
             } else {
                 // the rest is normalized by json encoding and decoding it
-                $encoded = $this->toJson($data, \true);
-                if ($encoded === \false) {
-                    $value = 'JSON_ERROR';
-                } else {
-                    $value = \json_decode($encoded, \true);
-                }
+                $value = \json_decode($this->toJson($data, \true), \true);
             }
             return [\Woosa\Adyen\Monolog\Utils::getClass($data) => $value];
         }
@@ -203,11 +211,11 @@ class NormalizerFormatter implements \Woosa\Adyen\Monolog\Formatter\FormatterInt
         }
         return $date->format($this->dateFormat);
     }
-    public function addJsonEncodeOption($option)
+    public function addJsonEncodeOption(int $option)
     {
         $this->jsonEncodeOptions |= $option;
     }
-    public function removeJsonEncodeOption($option)
+    public function removeJsonEncodeOption(int $option)
     {
         $this->jsonEncodeOptions &= ~$option;
     }

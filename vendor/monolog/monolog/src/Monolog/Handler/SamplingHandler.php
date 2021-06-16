@@ -88,14 +88,22 @@ class SamplingHandler extends \Woosa\Adyen\Monolog\Handler\AbstractHandler imple
      */
     public function setFormatter(\Woosa\Adyen\Monolog\Formatter\FormatterInterface $formatter) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {
-        $this->getHandler()->setFormatter($formatter);
-        return $this;
+        $handler = $this->getHandler();
+        if ($handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            $handler->setFormatter($formatter);
+            return $this;
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
     /**
      * {@inheritdoc}
      */
     public function getFormatter() : \Woosa\Adyen\Monolog\Formatter\FormatterInterface
     {
-        return $this->getHandler()->getFormatter();
+        $handler = $this->getHandler();
+        if ($handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            return $handler->getFormatter();
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
 }

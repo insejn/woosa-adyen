@@ -5,6 +5,12 @@ namespace Woosa\Adyen\Adyen\HttpClient;
 use Woosa\Adyen\Adyen\AdyenException;
 class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
 {
+    // List of parameters that needs to be masked with the same array structure as it appears in
+    // the response array
+    private static $responseParamsToMask = array('paymentData', 'action' => array('paymentData'));
+    // List of parameters that needs to be masked with the same array structure as it appears in
+    // the request array
+    private static $requestParamsToMask = array('paymentData', 'card' => array('number', 'cvc'), 'additionalData' => array('card.encrypted.json'), 'paymentMethod' => array('number', 'expiryMonth', 'expiryYear', 'cvc', 'encryptedCardNumber', 'encryptedExpiryMonth', 'encryptedExpiryYear', 'encryptedSecurityCode', 'applepay.token', 'paywithgoogle.token'));
     /**
      * Json API request to Adyen
      *
@@ -23,9 +29,10 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
         $password = $config->getPassword();
         $xApiKey = $config->getXApiKey();
         $httpProxy = $config->getHttpProxy();
+        $environment = $config->getEnvironment();
         $jsonRequest = \json_encode($params);
         // log the request
-        $this->logRequest($logger, $requestUrl, $params);
+        $this->logRequest($logger, $requestUrl, $environment, $params);
         //Initiate cURL.
         $ch = \curl_init($requestUrl);
         //Tell cURL that we want to send a POST request.
@@ -63,13 +70,14 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
         \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
         //Execute the request
         list($result, $httpStatus) = $this->curlRequest($ch);
-        // log the raw response
-        $logger->info("JSON Response is: " . $result);
+        // log the response
+        $decodedResult = \json_decode($result, \true);
+        $this->logResponse($logger, $environment, $decodedResult);
         // Get errors
         list($errno, $message) = $this->curlError($ch);
         \curl_close($ch);
-        // result not 200 throw error
-        if ($httpStatus != 200 && $result) {
+        $resultOKHttpStatusCodes = array(200, 201, 202, 204);
+        if (!\in_array($httpStatus, $resultOKHttpStatusCodes) && $result) {
             $this->handleResultError($result, $logger);
         } elseif (!$result) {
             $this->handleCurlError($requestUrl, $errno, $message, $logger);
@@ -78,8 +86,6 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
         if ($config->getOutputType() == 'array') {
             // transform to PHP Array
             $result = \json_decode($result, \true);
-            // log the array result
-            $logger->info('Params in response from Adyen:' . \print_r($result, 1));
         }
         return $result;
     }
@@ -125,9 +131,9 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
         $username = $config->getUsername();
         $password = $config->getPassword();
         $httpProxy = $config->getHttpProxy();
-        // log the requestUr, params and json request
-        $logger->info("Request url to Adyen: " . $requestUrl);
-        $logger->info('Params in request to Adyen:' . \print_r($params, 1));
+        $environment = $config->getEnvironment();
+        // log the request
+        $this->logRequest($logger, $requestUrl, $environment, $params);
         //Initiate cURL.
         $ch = \curl_init($requestUrl);
         //Tell cURL that we want to send a POST request.
@@ -147,8 +153,9 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
         \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
         //Execute the request
         list($result, $httpStatus) = $this->curlRequest($ch);
-        // log the raw response
-        $logger->info("JSON Response is: " . $result);
+        // log the response
+        $decodedResult = \json_decode($result, \true);
+        $this->logResponse($logger, $environment, $decodedResult);
         // Get errors
         list($errno, $message) = $this->curlError($ch);
         \curl_close($ch);
@@ -167,8 +174,6 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
                 $logger->error($msg);
                 throw new \Woosa\Adyen\Adyen\AdyenException($msg);
             }
-            // log the array result
-            $logger->info('Params in response from Adyen:' . \print_r($result, 1));
         }
         return $result;
     }
@@ -214,7 +219,7 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
         $decodeResult = \json_decode($result, \true);
         if (isset($decodeResult['message']) && isset($decodeResult['errorCode'])) {
             $logger->error($decodeResult['errorCode'] . ': ' . $decodeResult['message']);
-            throw new \Woosa\Adyen\Adyen\AdyenException($decodeResult['message'], $decodeResult['errorCode'], null, $decodeResult['status'], $decodeResult['errorType'], isset($decodeResult['pspReference']) ? $decodeResult['pspReference'] : null);
+            throw new \Woosa\Adyen\Adyen\AdyenException($decodeResult['message'], $decodeResult['status'], null, $decodeResult['status'], $decodeResult['errorType'], isset($decodeResult['pspReference']) ? $decodeResult['pspReference'] : null, $decodeResult['errorCode']);
         }
         $logger->error($result);
         throw new \Woosa\Adyen\Adyen\AdyenException($result);
@@ -223,21 +228,79 @@ class CurlClient implements \Woosa\Adyen\Adyen\HttpClient\ClientInterface
      * Logs the API request, removing sensitive data
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param $requestUrl
-     * @param $params
+     * @param string requestUrl
+     * @param string $environment
+     * @param array $params
      */
-    private function logRequest(\Woosa\Adyen\Psr\Log\LoggerInterface $logger, $requestUrl, $params)
+    private function logRequest(\Woosa\Adyen\Psr\Log\LoggerInterface $logger, $requestUrl, $environment, $params)
     {
         // log the requestUr, params and json request
         $logger->info("Request url to Adyen: " . $requestUrl);
-        if (isset($params["additionalData"]) && isset($params["additionalData"]["card.encrypted.json"])) {
-            $params["additionalData"]["card.encrypted.json"] = "*";
-        }
-        if (isset($params["card"]) && isset($params["card"]["number"])) {
-            $params["card"]["number"] = "*";
-            $params["card"]["cvc"] = "*";
+        // Filter sensitive data from logs when live
+        if (\Woosa\Adyen\Adyen\Environment::LIVE == $environment) {
+            $params = $this->maskParametersRecursive(self::$requestParamsToMask, $params);
         }
         $logger->info('JSON Request to Adyen:' . \json_encode($params));
+    }
+    /**
+     * Logs the API request, removing sensitive data
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param string requestUrl
+     * @param string $environment
+     * @param array $params
+     */
+    private function logResponse(\Woosa\Adyen\Psr\Log\LoggerInterface $logger, $environment, $params)
+    {
+        // Filter sensitive data from logs when live
+        if (\Woosa\Adyen\Adyen\Environment::LIVE == $environment) {
+            $params = $this->maskParametersRecursive(self::$responseParamsToMask, $params);
+        }
+        $logger->info('JSON Response to Adyen:' . \json_encode($params));
+    }
+    /**
+     * @param $value
+     * @param $key
+     * @param $param
+     */
+    private function maskParametersRecursive($paramsToMaskList, $params)
+    {
+        if (\is_array($paramsToMaskList)) {
+            foreach ($paramsToMaskList as $key => $paramsToMask) {
+                if (\is_array($paramsToMask) && isset($params[$key])) {
+                    // if $paramsToMask is an array and $params[$key] exists, $paramsToMask is an array of keys
+                    $params[$key] = $this->maskParametersRecursive($paramsToMask, $params[$key]);
+                } elseif (!\is_array($paramsToMask) && isset($params[$paramsToMask])) {
+                    // if $paramsToMask is not an array and $params[$paramsToMask] exists, $params[$paramsToMask] is
+                    // a parameter that needs to be masked
+                    $params[$paramsToMask] = $this->maskParameter($params[$paramsToMask]);
+                }
+            }
+        } else {
+            // in case $paramsToMaskList is not an array then it is a parameter that needs to be masked
+            $params[$paramsToMaskList] = $this->maskParameter($params[$paramsToMaskList]);
+        }
+        return $params;
+    }
+    /**
+     * Masks the parameter
+     * If the value is longer than 6 char then 3 asterisks are appended to the first 6 char of the value
+     * If the value is shorter than 6 char then replace all the chars with asterisks
+     *
+     * @param $parameter
+     * @return string
+     */
+    private function maskParameter($parameter)
+    {
+        if (empty($parameter)) {
+            return $parameter;
+        }
+        if (\strlen($parameter) > 6) {
+            $parameter = \substr($parameter, 0, 6) . '***';
+        } else {
+            $parameter = \str_repeat('*', \strlen($parameter));
+        }
+        return $parameter;
     }
     /**
      * Execute curl, return the result and the http response code

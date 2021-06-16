@@ -26,6 +26,15 @@ class WildfireFormatter extends \Woosa\Adyen\Monolog\Formatter\NormalizerFormatt
      */
     private $logLevels = [\Woosa\Adyen\Monolog\Logger::DEBUG => 'LOG', \Woosa\Adyen\Monolog\Logger::INFO => 'INFO', \Woosa\Adyen\Monolog\Logger::NOTICE => 'INFO', \Woosa\Adyen\Monolog\Logger::WARNING => 'WARN', \Woosa\Adyen\Monolog\Logger::ERROR => 'ERROR', \Woosa\Adyen\Monolog\Logger::CRITICAL => 'ERROR', \Woosa\Adyen\Monolog\Logger::ALERT => 'ERROR', \Woosa\Adyen\Monolog\Logger::EMERGENCY => 'ERROR'];
     /**
+     * @param string|null $dateFormat The format of the timestamp: one supported by DateTime::format
+     */
+    public function __construct(?string $dateFormat = null)
+    {
+        parent::__construct($dateFormat);
+        // http headers do not like non-ISO-8559-1 characters
+        $this->removeJsonEncodeOption(\JSON_UNESCAPED_UNICODE);
+    }
+    /**
      * {@inheritdoc}
      */
     public function format(array $record) : string
@@ -76,7 +85,7 @@ class WildfireFormatter extends \Woosa\Adyen\Monolog\Formatter\NormalizerFormatt
     }
     /**
      * {@inheritdoc}
-     * @suppress PhanTypeMismatchReturn
+     * @return int|bool|string|null|array|object
      */
     protected function normalize($data, int $depth = 0)
     {

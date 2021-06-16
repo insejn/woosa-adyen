@@ -96,6 +96,7 @@ class HandlerWrapper implements \Woosa\Adyen\Monolog\Handler\HandlerInterface, \
     {
         if ($this->handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
             $this->handler->setFormatter($formatter);
+            return $this;
         }
         throw new \LogicException('The wrapped handler does not implement ' . \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface::class);
     }
@@ -112,7 +113,7 @@ class HandlerWrapper implements \Woosa\Adyen\Monolog\Handler\HandlerInterface, \
     public function reset()
     {
         if ($this->handler instanceof \Woosa\Adyen\Monolog\ResettableInterface) {
-            return $this->handler->reset();
+            $this->handler->reset();
         }
     }
 }

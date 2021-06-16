@@ -21,6 +21,7 @@ use Woosa\Adyen\Monolog\ResettableInterface;
 class GroupHandler extends \Woosa\Adyen\Monolog\Handler\Handler implements \Woosa\Adyen\Monolog\Handler\ProcessableHandlerInterface, \Woosa\Adyen\Monolog\ResettableInterface
 {
     use ProcessableHandlerTrait;
+    /** @var HandlerInterface[] */
     protected $handlers;
     protected $bubble;
     /**
@@ -100,7 +101,9 @@ class GroupHandler extends \Woosa\Adyen\Monolog\Handler\Handler implements \Woos
     public function setFormatter(\Woosa\Adyen\Monolog\Formatter\FormatterInterface $formatter) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {
         foreach ($this->handlers as $handler) {
-            $handler->setFormatter($formatter);
+            if ($handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+                $handler->setFormatter($formatter);
+            }
         }
         return $this;
     }

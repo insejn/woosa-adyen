@@ -25,7 +25,6 @@ trait ProcessableHandlerTrait
     protected $processors = [];
     /**
      * {@inheritdoc}
-     * @suppress PhanTypeMismatchReturn
      */
     public function pushProcessor(callable $callback) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {

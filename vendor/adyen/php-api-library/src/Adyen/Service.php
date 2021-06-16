@@ -24,7 +24,7 @@ class Service
         // validate if client has all the configuration we need
         if (!$client->getConfig()->get('environment')) {
             // throw exception
-            $msg = "The Client does not have a correct environment, use " . \Woosa\Adyen\Adyen\Environment::TEST . ' or ' . \Woosa\Adyen\Adyen\Environment::LIVE;
+            $msg = 'The Client does not have a correct environment, use ' . \Woosa\Adyen\Adyen\Environment::TEST . ' or ' . \Woosa\Adyen\Adyen\Environment::LIVE;
             throw new \Woosa\Adyen\Adyen\AdyenException($msg);
         }
         $this->client = $client;

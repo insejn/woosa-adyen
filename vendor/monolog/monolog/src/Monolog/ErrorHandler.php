@@ -52,6 +52,7 @@ class ErrorHandler
      */
     public static function register(\Woosa\Adyen\Psr\Log\LoggerInterface $logger, $errorLevelMap = [], $exceptionLevelMap = [], $fatalLevel = null) : self
     {
+        /** @phpstan-ignore-next-line */
         $handler = new static($logger);
         if ($errorLevelMap !== \false) {
             $handler->registerErrorHandler($errorLevelMap);
@@ -66,7 +67,9 @@ class ErrorHandler
     }
     public function registerExceptionHandler($levelMap = [], $callPrevious = \true) : self
     {
-        $prev = \set_exception_handler([$this, 'handleException']);
+        $prev = \set_exception_handler(function (\Throwable $e) : void {
+            $this->handleException($e);
+        });
         $this->uncaughtExceptionLevelMap = $levelMap;
         foreach ($this->defaultExceptionLevelMap() as $class => $level) {
             if (!isset($this->uncaughtExceptionLevelMap[$class])) {
@@ -108,11 +111,7 @@ class ErrorHandler
     {
         return [\E_ERROR => \Woosa\Adyen\Psr\Log\LogLevel::CRITICAL, \E_WARNING => \Woosa\Adyen\Psr\Log\LogLevel::WARNING, \E_PARSE => \Woosa\Adyen\Psr\Log\LogLevel::ALERT, \E_NOTICE => \Woosa\Adyen\Psr\Log\LogLevel::NOTICE, \E_CORE_ERROR => \Woosa\Adyen\Psr\Log\LogLevel::CRITICAL, \E_CORE_WARNING => \Woosa\Adyen\Psr\Log\LogLevel::WARNING, \E_COMPILE_ERROR => \Woosa\Adyen\Psr\Log\LogLevel::ALERT, \E_COMPILE_WARNING => \Woosa\Adyen\Psr\Log\LogLevel::WARNING, \E_USER_ERROR => \Woosa\Adyen\Psr\Log\LogLevel::ERROR, \E_USER_WARNING => \Woosa\Adyen\Psr\Log\LogLevel::WARNING, \E_USER_NOTICE => \Woosa\Adyen\Psr\Log\LogLevel::NOTICE, \E_STRICT => \Woosa\Adyen\Psr\Log\LogLevel::NOTICE, \E_RECOVERABLE_ERROR => \Woosa\Adyen\Psr\Log\LogLevel::ERROR, \E_DEPRECATED => \Woosa\Adyen\Psr\Log\LogLevel::NOTICE, \E_USER_DEPRECATED => \Woosa\Adyen\Psr\Log\LogLevel::NOTICE];
     }
-    /**
-     * @private
-     * @param \Exception $e
-     */
-    public function handleException($e)
+    private function handleException(\Throwable $e)
     {
         $level = \Woosa\Adyen\Psr\Log\LogLevel::ERROR;
         foreach ($this->uncaughtExceptionLevelMap as $class => $candidate) {

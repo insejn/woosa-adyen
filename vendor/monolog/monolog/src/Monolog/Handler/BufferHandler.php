@@ -25,6 +25,7 @@ use Woosa\Adyen\Monolog\Formatter\FormatterInterface;
 class BufferHandler extends \Woosa\Adyen\Monolog\Handler\AbstractHandler implements \Woosa\Adyen\Monolog\Handler\ProcessableHandlerInterface, \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
+    /** @var HandlerInterface */
     protected $handler;
     protected $bufferSize = 0;
     protected $bufferLimit;
@@ -117,14 +118,20 @@ class BufferHandler extends \Woosa\Adyen\Monolog\Handler\AbstractHandler impleme
      */
     public function setFormatter(\Woosa\Adyen\Monolog\Formatter\FormatterInterface $formatter) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {
-        $this->handler->setFormatter($formatter);
-        return $this;
+        if ($this->handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            $this->handler->setFormatter($formatter);
+            return $this;
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
     }
     /**
      * {@inheritdoc}
      */
     public function getFormatter() : \Woosa\Adyen\Monolog\Formatter\FormatterInterface
     {
-        return $this->handler->getFormatter();
+        if ($this->handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            return $this->handler->getFormatter();
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
     }
 }

@@ -35,6 +35,7 @@ use Woosa\Adyen\Monolog\Formatter\FormatterInterface;
 class FingersCrossedHandler extends \Woosa\Adyen\Monolog\Handler\Handler implements \Woosa\Adyen\Monolog\Handler\ProcessableHandlerInterface, \Woosa\Adyen\Monolog\ResettableInterface, \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
+    /** @var HandlerInterface */
     protected $handler;
     protected $activationStrategy;
     protected $buffering = \true;
@@ -178,14 +179,22 @@ class FingersCrossedHandler extends \Woosa\Adyen\Monolog\Handler\Handler impleme
      */
     public function setFormatter(\Woosa\Adyen\Monolog\Formatter\FormatterInterface $formatter) : \Woosa\Adyen\Monolog\Handler\HandlerInterface
     {
-        $this->getHandler()->setFormatter($formatter);
-        return $this;
+        $handler = $this->getHandler();
+        if ($handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            $handler->setFormatter($formatter);
+            return $this;
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
     /**
      * {@inheritdoc}
      */
     public function getFormatter() : \Woosa\Adyen\Monolog\Formatter\FormatterInterface
     {
-        return $this->getHandler()->getFormatter();
+        $handler = $this->getHandler();
+        if ($handler instanceof \Woosa\Adyen\Monolog\Handler\FormattableHandlerInterface) {
+            return $handler->getFormatter();
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
 }

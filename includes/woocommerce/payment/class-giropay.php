@@ -138,11 +138,7 @@ class Giropay extends Ideal{
     */
    protected function build_payment_payload(\WC_Order $order, $reference){
 
-      $payload = array_merge(Abstract_Gateway::build_payment_payload($order, $reference), [
-         'paymentMethod' => [
-            'type' => $this->payment_method_type(),
-         ]
-      ]);
+      $payload = Abstract_Gateway::build_payment_payload($order, $reference);
 
       return $payload;
    }

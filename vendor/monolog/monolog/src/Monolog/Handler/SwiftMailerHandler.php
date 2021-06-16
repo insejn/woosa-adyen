@@ -83,9 +83,11 @@ class SwiftMailerHandler extends \Woosa\Adyen\Monolog\Handler\MailHandler
             $mime = 'text/html';
         }
         $message->setBody($content, $mime);
+        /** @phpstan-ignore-next-line */
         if (\version_compare(\Woosa\Adyen\Swift::VERSION, '6.0.0', '>=')) {
             $message->setDate(new \DateTimeImmutable());
         } else {
+            /** @phpstan-ignore-next-line */
             $message->setDate(\time());
         }
         return $message;

@@ -2,10 +2,12 @@
 
 namespace Woosa\Adyen\Adyen\Service;
 
+use Woosa\Adyen\Adyen\AdyenException;
+use Woosa\Adyen\Adyen\Service;
 abstract class AbstractResource
 {
     /**
-     * @var \Adyen\Service
+     * @var Service
      */
     protected $service;
     /**
@@ -23,7 +25,7 @@ abstract class AbstractResource
     /**
      * AbstractResource constructor.
      *
-     * @param \Adyen\Service $service
+     * @param Service $service
      * @param string $endpoint
      * @param bool $allowApplicationInfo
      * @param bool $allowApplicationInfoPOS
@@ -41,7 +43,7 @@ abstract class AbstractResource
      * @param $params
      * @param null $requestOptions
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function request($params, $requestOptions = null)
     {
@@ -76,7 +78,7 @@ abstract class AbstractResource
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function requestPost($params)
     {
@@ -158,6 +160,7 @@ abstract class AbstractResource
             if (!empty($queryString) && !empty($queryStringValues[0])) {
                 $saleToAcquirerData = $queryString;
             } elseif ($this->isBase64Encoded($saleToAcquirerData)) {
+                //If SaleToAcquirerData is a base64encoded string decode it and convert it to array
                 $saleToAcquirerData = \json_decode(\base64_decode($saleToAcquirerData, \true), \true);
             }
         }

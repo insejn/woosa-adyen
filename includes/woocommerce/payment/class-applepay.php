@@ -165,7 +165,7 @@ class Applepay extends Abstract_Gateway{
     * @param WC_Order $order
     * @return array
     */
-   protected function build_payment_payload($order){
+   protected function build_payment_payload(\WC_Order $order, $reference){
 
       $token_raw = stripslashes($_POST[$this->id.'_token']);
       $token = json_decode($token_raw);

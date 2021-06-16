@@ -119,7 +119,7 @@ class ChromePHPHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHa
             }
             self::$json['request_uri'] = $_SERVER['REQUEST_URI'] ?? '';
         }
-        $json = \Woosa\Adyen\Monolog\Utils::jsonEncode(self::$json, null, \true);
+        $json = \Woosa\Adyen\Monolog\Utils::jsonEncode(self::$json, \Woosa\Adyen\Monolog\Utils::DEFAULT_JSON_FLAGS & ~\JSON_UNESCAPED_UNICODE, \true);
         $data = \base64_encode(\utf8_encode($json));
         if (\strlen($data) > 3 * 1024) {
             self::$overflowed = \true;

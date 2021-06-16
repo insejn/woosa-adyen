@@ -16,7 +16,7 @@ class AbstractCheckoutResource extends \Woosa\Adyen\Adyen\Service\AbstractResour
         // check if endpoint is set
         if ($service->getClient()->getConfig()->get('endpointCheckout') == null) {
             $logger = $service->getClient()->getLogger();
-            $msg = "Please provide your unique live url prefix on the setEnvironment() call on the Client or provide endpointCheckout in your config object.";
+            $msg = 'Please provide your unique live url prefix on the' . ' setEnvironment() call on the Client or provide endpointCheckout' . ' in your config object.';
             $logger->error($msg);
             throw new \Woosa\Adyen\Adyen\AdyenException($msg);
         }

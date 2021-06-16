@@ -20,7 +20,121 @@ use Woosa\Adyen\Adyen\Client;
 defined( 'ABSPATH' ) || exit;
 
 
-class API{
+class API extends Abstract_API{
+
+
+   /**
+    * Adds the section fields.
+    *
+    * @param array $fields
+    * @param string $section
+    * @return array
+    */
+   public function add_section_fields($fields, $section){
+
+      if( 'authorization' === $section ){
+         $fields = [
+            [
+               'name' => __('Authorization', '{text_domain}'),
+               'desc' => $this->api_desc(),
+               'type' => 'title',
+            ],
+            [
+               'name'     => __('Live Merchant Account', 'woosa-adyen'),
+               'id'       => PREFIX.'_merchant_account',
+               'autoload' => false,
+               'type'     => 'text',
+               'desc_tip' => __('The Merchant Account used in production environment.', 'woosa-adyen'),
+            ],
+            [
+               'name'     => __('Live API Key', 'woosa-adyen'),
+               'id'       => PREFIX.'_api_key',
+               'autoload' => false,
+               'type'     => 'password',
+               'desc_tip' => __('The API Key used in production environment.', 'woosa-adyen'),
+            ],
+            [
+               'name'     => __('Live URL-prefix', 'woosa-adyen'),
+               'id'       => PREFIX.'_url_prefix',
+               'autoload' => false,
+               'type'     => 'text',
+               'desc_tip' => __('Provide here the LIVE URL-prefix you have from Adyen', 'woosa-adyen'),
+            ],
+            [
+               'name'    => __('Test Mode', 'woosa-adyen'),
+               'id'      => PREFIX.'_testmode',
+               'autoload' => false,
+               'type'    => 'checkbox',
+               'desc'    => __('Enable/Disable', 'woosa-adyen'),
+               'default' => 'no'
+            ],
+            [
+               'name'     => __('Test Merchant Account', 'woosa-adyen'),
+               'id'       => PREFIX.'_test_merchant_account',
+               'autoload' => false,
+               'type'     => 'text',
+               'autoload' => false,
+               'class' => 'api_testmode_field',
+               'desc_tip' => __('The Merchant Account used in production environment.', 'woosa-adyen'),
+            ],
+            [
+               'name'     => __('Test API Key', 'woosa-adyen'),
+               'id'       => PREFIX.'_test_api_key',
+               'autoload' => false,
+               'type'     => 'password',
+               'autoload' => false,
+               'class' => 'api_testmode_field',
+               'desc_tip' => __('The API Key used for test environment.', 'woosa-adyen'),
+            ],
+            [
+               'type' => 'sectionend',
+            ],
+         ];
+      }
+
+      return $fields;
+   }
+
+
+
+   /**
+    * API description
+    *
+    * @since 1.0.7 - display the domain of the origin key
+    * @since 1.0.0
+    * @return string
+    */
+   public function api_desc(){
+
+      ob_start();
+      ?>
+
+      <ul>
+         <li><?php printf(__('%sHow can I get an API key ?%s', 'woosa-adyen'), '<a href="https://docs.adyen.com/development-resources/api-credentials#generate-api-key" target="_blank">', '</a>');?></li>
+         <li><?php printf(__('%sHow can I get a Live URL-prefix ?%s', 'woosa-adyen'), '<a href="https://docs.adyen.com/development-resources/live-endpoints#live-url-prefix" target="_blank">','</a>');?></li>
+      </ul>
+
+      <?php
+
+      $show_origin_keys = '';
+      $origin_keys = get_option( PREFIX . '_origin_keys', [] );
+
+      if(empty($origin_keys)){
+         $show_origin_keys = '<span style="color: #a30000;">'.__( 'No origin key found, please make sure you provided all the information below and hit the "Save Changes" button!', 'woosa-adyen' ).'</span>';
+      }else{
+
+         foreach($origin_keys as $org_domain => $org_key){
+            $show_origin_keys .= '<code>'. $org_domain . '</code> - <code>'.$org_key.'</code>';
+         }
+      }
+
+      $output = $this->render_status();
+      $output .= '<br/><b>'.__('Origin domain & key:', 'woosa-adyen').'</b> '.$show_origin_keys;
+      $output .= str_replace(array("\r","\n"), '', trim(ob_get_clean()));
+
+      return $output;
+   }
+
 
 
    /**
@@ -73,18 +187,20 @@ class API{
     */
    public static function app_info(){
 
-      global $woocommerce;
-
       return [
          'applicationInfo' => [
-            'adyenPaymentSource' => [
-               'name' => 'adyen-woocommerce',
+            'merchantApplication' => [
+               'name' => PLUGIN_NAME,
                'version' => PLUGIN_VERSION
             ],
             'externalPlatform' => [
-               'name' => 'WooCommerce',
-               'version' => $woocommerce->version,
+               'name' => 'Wordpress',
+               'version' => get_bloginfo('version'),
                'integrator' => 'Woosa'
+            ],
+            'adyenLibrary' => [
+               'name' => 'php-api-library',
+               'version' => '10.*',
             ]
          ]
       ];
@@ -100,9 +216,7 @@ class API{
     */
    public static function is_configured(){
 
-      $authorized = get_option(PREFIX.'_is_authorized');
-
-      if( empty($authorized) || empty(self::account()->key) || empty(self::account()->merchant) || (self::account()->test_mode === 'no' && empty(self::account()->prefix)) ){
+      if( ! API::instance()->is_authorized() || empty(self::account()->key) || empty(self::account()->merchant) || (self::account()->test_mode === 'no' && empty(self::account()->prefix)) ){
          return false;
       }
 
@@ -256,6 +370,7 @@ class API{
    /**
     * Gets stored cards which has `Ecommerce` supported
     *
+    * @since 1.1.3 - make sure it gets only cards
     * @since 1.0.3
     * @param string $country
     * @param integer $amount
@@ -267,7 +382,7 @@ class API{
       $list = self::get_stored_payment_methods($country, $amount);
 
       foreach($list as $item){
-         if(in_array('Ecommerce', $item['supportedShopperInteractions'])){
+         if(isset($item['lastFour']) && in_array('Ecommerce', $item['supportedShopperInteractions'])){
             $cards[] = $item;
          }
       }
@@ -280,6 +395,7 @@ class API{
    /**
     * Retrieves available card types
     *
+    * @since 1.1.3 - add support for API Checkout v67
     * @since 1.0.0
     * @param string $country
     * @return array
@@ -292,11 +408,11 @@ class API{
 
       $response = self::get_response_payment_methods($country);
 
-      if(isset($response['groups'])){
+      if(isset($response['paymentMethods'])){
 
-         foreach($response['groups'] as $group){
-            if($group['name'] == 'Credit Card'){
-               $result = $group['types'];
+         foreach($response['paymentMethods'] as $item){
+            if($item['type'] == 'scheme'){
+               $result = $item['brands'];
             }
          }
       }
@@ -826,7 +942,7 @@ class API{
     * @since 1.0.0
     * @return void
     */
-   public static function check_connection(){
+   public function check_connection(){
 
       try{
 
@@ -841,7 +957,7 @@ class API{
 
          Errors::delete( 'connection' );
 
-         update_option(PREFIX.'_is_authorized', 'yes');
+         $this->set_as_authorized();
 
          self::generate_origin_keys();
 
@@ -851,7 +967,7 @@ class API{
 
          Errors::save( API::get_error_msg($e->getMessage(), $e->getMessage()), 'connection' );
 
-         delete_option(PREFIX.'_is_authorized');
+         $this->set_as_unauthorized();
 
          return false;
       }

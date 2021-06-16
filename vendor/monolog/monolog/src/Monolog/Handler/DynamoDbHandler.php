@@ -47,6 +47,7 @@ class DynamoDbHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHan
      */
     public function __construct(\Woosa\Adyen\Aws\DynamoDb\DynamoDbClient $client, string $table, $level = \Woosa\Adyen\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
+        /** @phpstan-ignore-next-line */
         if (\defined('Aws\\Sdk::VERSION') && \version_compare(\Woosa\Adyen\Aws\Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
             $this->marshaler = new \Woosa\Adyen\Aws\DynamoDb\Marshaler();
@@ -66,6 +67,7 @@ class DynamoDbHandler extends \Woosa\Adyen\Monolog\Handler\AbstractProcessingHan
         if ($this->version === 3) {
             $formatted = $this->marshaler->marshalItem($filtered);
         } else {
+            /** @phpstan-ignore-next-line */
             $formatted = $this->client->formatAttributes($filtered);
         }
         $this->client->putItem(['TableName' => $this->table, 'Item' => $formatted]);

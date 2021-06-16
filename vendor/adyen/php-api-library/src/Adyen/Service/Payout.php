@@ -2,6 +2,18 @@
 
 namespace Woosa\Adyen\Adyen\Service;
 
+use Woosa\Adyen\Adyen\AdyenException;
+use Woosa\Adyen\Adyen\Client;
+use Woosa\Adyen\Adyen\Service;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\Confirm;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\Decline;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\StoreDetailsAndSubmit;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\Submit;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\ThirdParty\ConfirmThirdParty;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\ThirdParty\DeclineThirdParty;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\ThirdParty\StoreDetail;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\ThirdParty\StoreDetailsAndSubmitThirdParty;
+use Woosa\Adyen\Adyen\Service\ResourceModel\Payout\ThirdParty\SubmitThirdParty;
 class Payout extends \Woosa\Adyen\Adyen\Service
 {
     /**
@@ -43,8 +55,8 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * Payout constructor.
      *
-     * @param \Adyen\Client $client
-     * @throws \Adyen\AdyenException
+     * @param Client $client
+     * @throws AdyenException
      */
     public function __construct(\Woosa\Adyen\Adyen\Client $client)
     {
@@ -62,7 +74,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function confirm($params)
     {
@@ -72,7 +84,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function decline($params)
     {
@@ -82,7 +94,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function storeDetailsAndSubmit($params)
     {
@@ -92,7 +104,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function submit($params)
     {
@@ -102,7 +114,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function confirmThirdParty($params)
     {
@@ -112,7 +124,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function declineThirdParty($params)
     {
@@ -122,7 +134,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function storeDetailsAndSubmitThirdParty($params)
     {
@@ -132,7 +144,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function submitThirdParty($params)
     {
@@ -142,7 +154,7 @@ class Payout extends \Woosa\Adyen\Adyen\Service
     /**
      * @param $params
      * @return mixed
-     * @throws \Adyen\AdyenException
+     * @throws AdyenException
      */
     public function storeDetail($params)
     {

@@ -107,33 +107,6 @@ class Wechatpay extends Abstract_Gateway{
 
 
    /**
-    * Adds extra fields.
-    *
-    * @since 1.0.0
-    * @return void
-    */
-   public function payment_fields() {
-
-      parent::payment_fields();
-
-      echo $this->generate_extra_fields_html();
-
-   }
-
-
-
-   /**
-    * Generates extra fields HTML.
-    *
-    * @since 1.0.3 - added installments field
-    * @since 1.0.0
-    * @return string
-    */
-   public function generate_extra_fields_html(){
-   }
-
-
-   /**
     * Validates extra added fields.
     *
     * @since 1.0.0
@@ -200,7 +173,7 @@ class Wechatpay extends Abstract_Gateway{
          $order->update_meta_data('_'.PREFIX.'_payment_action', $action);
          $order->save();
 
-         if( 'PresentToShopper' == $result_code ){
+         if( 'Pending' == $result_code ){
 
             $result = [
                'result'   => 'success',

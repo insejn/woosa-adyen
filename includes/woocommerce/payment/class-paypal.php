@@ -20,20 +20,6 @@ class Paypal extends Abstract_Gateway{
 
 
    /**
-    * Constructor of this class.
-    *
-    * @since 1.1.0
-    */
-   public function __construct(){
-
-      parent::__construct();
-
-      $this->send_payment_details();
-
-   }
-
-
-   /**
     * List of countries where is available.
     *
     * @since 1.1.0
@@ -109,22 +95,6 @@ class Paypal extends Abstract_Gateway{
 
 
    /**
-    * Adds extra fields.
-    *
-    * @since 1.1.0
-    * @return void
-    */
-   public function payment_fields() {
-
-      parent::payment_fields();
-
-      echo $this->generate_extra_fields_html();
-
-   }
-
-
-
-   /**
     * Adds an array of fields to be displayed on the gateway's settings screen.
     *
     * @since 1.1.0
@@ -184,8 +154,8 @@ class Paypal extends Abstract_Gateway{
                      <li><b>Authorize and capture your PayPal transactions.</b></li>
                      <li><b>Obtain information about a single transaction.</b></li>
                      <li><b>Obtain authorization for pre-approved payments and initiate pre-approved transactions.</b></li>
-                     <li><b>Generate consolidated reports for all accounts. (if available in your region)</b></li>
-                     <li><b>Use Express Checkout to process mobile payments. (if you plan on supporting mobile payments)</b></li>
+                     <li><b>Generate consolidated reports for all accounts.</b> (if available in your region)</li>
+                     <li><b>Use Express Checkout to process mobile payments.</b> (if you plan on supporting mobile payments)</li>
                      <li><b>Charge an existing customer based on a prior transaction.</b></li>
                      <li><b>Create and manage Recurring Payments.</b></li>
                      <li><b>Obtain your PayPal account balance.</b></li>
@@ -280,48 +250,6 @@ class Paypal extends Abstract_Gateway{
       $order->save();
 
       return $result;
-   }
-
-
-
-   /**
-    * Sends received payment details to be processed
-    *
-    * @since 1.1.0
-    * @return void
-    */
-   public function send_payment_details(){
-
-      if(is_checkout() && isset($_GET['key']) && isset($_GET['payload'])){
-
-         $order_id = wc_get_order_id_by_order_key($_GET['key']);
-         $order    = wc_get_order($order_id);
-
-         if($order instanceof \WC_Order){
-
-            $payment_method_type = str_replace('woosa_adyen_', '', $order->get_payment_method()); //replace the prefix
-
-            //only if the order payment method type matches
-            if($payment_method_type === $this->payment_method_type()){
-
-               $action = $order->get_meta('_' . PREFIX . '_payment_action', true);
-               $payload = [
-                  'paymentData' => Utility::rgar($action, 'paymentData'),
-                  'details' => [
-                     'payload' => $_GET['payload'],
-                  ]
-               ];
-
-               $request = API::send_payment_details($payload);
-
-               $this->update_order_status_based_on_payment_result($order, $request);
-
-               wp_redirect( $this->get_return_url( $order ) );
-            }
-
-         }
-
-      }
    }
 
 

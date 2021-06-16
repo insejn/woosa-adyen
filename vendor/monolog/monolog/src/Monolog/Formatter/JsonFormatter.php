@@ -56,8 +56,6 @@ class JsonFormatter extends \Woosa\Adyen\Monolog\Formatter\NormalizerFormatter
     }
     /**
      * {@inheritdoc}
-     *
-     * @suppress PhanTypeComparisonToArray
      */
     public function format(array $record) : string
     {
